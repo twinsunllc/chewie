@@ -29,7 +29,7 @@ class Chewie extends StatefulWidget {
   final bool looping;
 
   /// Whether or not to show the controls
-  final bool showControls;
+  bool showControls;
 
   /// The Aspect Ratio of the Video. Important to get the correct size of the
   /// video!
@@ -58,6 +58,9 @@ class Chewie extends StatefulWidget {
   /// Defines if the controls should be for live stream video
   final bool isLive;
 
+  //disabled the showing of controls if the video is autoplayed
+  final bool hideControlsOnAutoPlay;
+
   Chewie(
     this.controller, {
     Key key,
@@ -73,8 +76,8 @@ class Chewie extends StatefulWidget {
     this.showControls = true,
     this.allowedScreenSleep = true,
     this.isLive = false,
-  })  : assert(controller != null,
-            'You must provide a controller to play a video'),
+    this.hideControlsOnAutoPlay = false,
+  })  : assert(controller != null, 'You must provide a controller to play a video'),
         super(key: key);
 
   @override
@@ -89,28 +92,46 @@ class _ChewiePlayerState extends State<Chewie> {
 
   @override
   Widget build(BuildContext context) {
-    return new PlayerWithControls(
-      controller: _controller,
-      onExpandCollapse: () => _pushFullScreenWidget(context),
-      aspectRatio: widget.aspectRatio ?? _calculateAspectRatio(context),
-      cupertinoProgressColors: widget.cupertinoProgressColors,
-      materialProgressColors: widget.materialProgressColors,
-      placeholder: widget.placeholder,
-      autoPlay: widget.autoPlay,
-      showControls: widget.showControls,
-      isLive: widget.isLive,
+    return new GestureDetector(
+      onTap: _tapped,
+      child: new PlayerWithControls(
+        controller: _controller,
+        onExpandCollapse: () => _pushFullScreenWidget(context),
+        aspectRatio: widget.aspectRatio ?? _calculateAspectRatio(context),
+        cupertinoProgressColors: widget.cupertinoProgressColors,
+        materialProgressColors: widget.materialProgressColors,
+        placeholder: widget.placeholder,
+        autoPlay: widget.autoPlay,
+        showControls: widget.showControls,
+        isLive: widget.isLive,
+      ),
     );
+  }
+
+  void _tapped() {
+    if (widget.autoPlay == false || widget.showControls == true) {
+      return;
+    }
+    if (widget.hideControlsOnAutoPlay == true && _controller.value.isPlaying && _controller.value.initialized) {
+      setState(() {
+        widget.showControls = true;
+      });
+    }
   }
 
   @override
   void initState() {
     super.initState();
     _controller = widget.controller;
+
+    //hide controls if they are enabled and hide bool is set
+    if (widget.showControls == true) {
+      widget.showControls = !widget.hideControlsOnAutoPlay;
+    }
     _initialize();
   }
 
-  Widget _buildFullScreenVideo(
-      BuildContext context, Animation<double> animation) {
+  Widget _buildFullScreenVideo(BuildContext context, Animation<double> animation) {
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
       body: new Container(
@@ -118,8 +139,7 @@ class _ChewiePlayerState extends State<Chewie> {
         color: Colors.black,
         child: new PlayerWithControls(
           controller: _controller,
-          onExpandCollapse: () =>
-              new Future<dynamic>.value(Navigator.of(context).pop()),
+          onExpandCollapse: () => new Future<dynamic>.value(Navigator.of(context).pop()),
           aspectRatio: widget.aspectRatio ?? _calculateAspectRatio(context),
           fullScreen: true,
           isLive: widget.isLive,
@@ -229,7 +249,7 @@ class _ChewiePlayerState extends State<Chewie> {
   }
 
   @override
-    void dispose() {
+  void dispose() {
     _controller.dispose();
     super.dispose();
   }

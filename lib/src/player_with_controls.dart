@@ -66,7 +66,7 @@ class _VideoPlayerWithControlsState extends State<PlayerWithControls> {
             child: new Hero(
               tag: controller,
               child: new AspectRatio(
-                aspectRatio: controller.value.isInitialized ? controller.value.aspectRatio : widget.aspectRatio,
+                aspectRatio: controller.value.initialized ? controller.value.aspectRatio : widget.aspectRatio,
                 child: new VideoPlayer(controller),
               ),
             ),
