@@ -227,4 +227,10 @@ class _ChewiePlayerState extends State<Chewie> {
 
     return width > height ? width / height : height / width;
   }
+
+  @override
+    void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 }
