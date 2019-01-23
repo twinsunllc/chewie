@@ -82,22 +82,11 @@ class _VideoPlayerWithControlsState extends State<PlayerWithControls> {
     VideoPlayerController controller,
   ) {
     return widget.showControls
-        ? Theme.of(context).platform == TargetPlatform.android
             ? new MaterialControls(
                 controller: controller,
                 onExpandCollapse: widget.onExpandCollapse,
                 fullScreen: widget.fullScreen,
                 progressColors: widget.materialProgressColors,
-                autoPlay: widget.autoPlay,
-                isLive: widget.isLive,
-              )
-            : new CupertinoControls(
-                backgroundColor: new Color.fromRGBO(41, 41, 41, 0.7),
-                iconColor: new Color.fromARGB(255, 200, 200, 200),
-                controller: controller,
-                onExpandCollapse: widget.onExpandCollapse,
-                fullScreen: widget.fullScreen,
-                progressColors: widget.cupertinoProgressColors,
                 autoPlay: widget.autoPlay,
                 isLive: widget.isLive,
               )
