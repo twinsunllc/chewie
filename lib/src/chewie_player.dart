@@ -235,8 +235,8 @@ class _ChewiePlayerState extends State<Chewie> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
+      // DeviceOrientation.landscapeLeft,
+      // DeviceOrientation.landscapeRight,
     ]);
   }
 
