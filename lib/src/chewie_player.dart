@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:chewie/src/chewie_progress_colors.dart';
 import 'package:chewie/src/player_with_controls.dart';
@@ -139,7 +140,12 @@ class _ChewiePlayerState extends State<Chewie> {
         color: Colors.black,
         child: new PlayerWithControls(
           controller: _controller,
-          onExpandCollapse: () => new Future<dynamic>.value(Navigator.of(context).pop()),
+          onExpandCollapse: () {
+            if (Platform.isIOS) {
+              _setIOSPortraitOrientation();
+            }
+            new Future<dynamic>.value(Navigator.of(context).pop());
+          },
           aspectRatio: widget.aspectRatio ?? _calculateAspectRatio(context),
           fullScreen: true,
           isLive: widget.isLive,
@@ -213,11 +219,13 @@ class _ChewiePlayerState extends State<Chewie> {
     );
 
     SystemChrome.setEnabledSystemUIOverlays([]);
-    if (isAndroid) {
-      SystemChrome.setPreferredOrientations([
-        DeviceOrientation.landscapeLeft,
-        DeviceOrientation.landscapeRight,
-      ]);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
+    if (Platform.isIOS) {
+      _setOrientationForIOS();
     }
 
     if (!widget.allowedScreenSleep) {
@@ -235,9 +243,21 @@ class _ChewiePlayerState extends State<Chewie> {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
-      // DeviceOrientation.landscapeLeft,
-      // DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
     ]);
+  }
+
+  void _setOrientationForIOS() async {
+    const channel = MethodChannel('chewie');
+    final String feedback =
+        await channel.invokeMethod('setIOSLandscapeOrienation', null);
+  }
+
+  void _setIOSPortraitOrientation() async {
+    const channel = MethodChannel('chewie');
+    final String feedback =
+        await channel.invokeMethod('setIOSPortraitOrienation', null);
   }
 
   double _calculateAspectRatio(BuildContext context) {
