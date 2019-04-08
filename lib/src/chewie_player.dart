@@ -218,14 +218,14 @@ class _ChewiePlayerState extends State<Chewie> {
       pageBuilder: _fullScreenRoutePageBuilder,
     );
 
-    SystemChrome.setEnabledSystemUIOverlays([]);
-    SystemChrome.setPreferredOrientations([
+    if (Platform.isIOS) {
+      _setOrientationForIOS();
+    } else {
+      SystemChrome.setEnabledSystemUIOverlays([]);
+      SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-
-    if (Platform.isIOS) {
-      _setOrientationForIOS();
     }
 
     if (!widget.allowedScreenSleep) {
@@ -249,12 +249,14 @@ class _ChewiePlayerState extends State<Chewie> {
   }
 
   void _setOrientationForIOS() async {
+    print('set orientation to landscape ios');
     const channel = MethodChannel('chewie');
     final String feedback =
         await channel.invokeMethod('setIOSLandscapeOrienation', null);
   }
 
   void _setIOSPortraitOrientation() async {
+    print('set orientation to portrait ios');
     const channel = MethodChannel('chewie');
     final String feedback =
         await channel.invokeMethod('setIOSPortraitOrienation', null);
