@@ -1,6 +1,6 @@
 name: chewie
 description: A video player for Flutter with Cupertino and Material play controls
-version: 0.8.0
+version: 0.8.1
 homepage: https://github.com/brianegan/chewie
 author: Brian Egan <brian@brianegan.com>
 
@@ -28,6 +28,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  plugin:
+    androidPackage: chewie.chewie
+    pluginClass: ChewiePlugin
 
   # To add assets to your application, add an assets section, like this:
   # assets:
