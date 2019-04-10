@@ -220,13 +220,12 @@ class _ChewiePlayerState extends State<Chewie> {
 
     if (Platform.isIOS) {
       _setOrientationForIOS();
-    } else {
+    }
       SystemChrome.setEnabledSystemUIOverlays([]);
       SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-    }
 
     if (!widget.allowedScreenSleep) {
       Screen.keepOn(true);
