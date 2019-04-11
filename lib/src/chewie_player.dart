@@ -142,6 +142,14 @@ class _ChewiePlayerState extends State<Chewie> {
           controller: _controller,
           onExpandCollapse: () {
             if (Platform.isIOS) {
+              //set back to portrait from system
+              SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+              SystemChrome.setPreferredOrientations([
+                DeviceOrientation.portraitUp,
+                DeviceOrientation.portraitDown,
+                // DeviceOrientation.landscapeLeft,
+                // DeviceOrientation.landscapeRight,
+              ]);
               _setIOSPortraitOrientation();
             }
             new Future<dynamic>.value(Navigator.of(context).pop());
