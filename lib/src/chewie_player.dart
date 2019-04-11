@@ -218,14 +218,16 @@ class _ChewiePlayerState extends State<Chewie> {
       pageBuilder: _fullScreenRoutePageBuilder,
     );
 
+    
+    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+    ]);
+
     if (Platform.isIOS) {
       _setOrientationForIOS();
     }
-      SystemChrome.setEnabledSystemUIOverlays([]);
-      SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
 
     if (!widget.allowedScreenSleep) {
       Screen.keepOn(true);
