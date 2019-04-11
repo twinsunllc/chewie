@@ -147,8 +147,6 @@ class _ChewiePlayerState extends State<Chewie> {
               SystemChrome.setPreferredOrientations([
                 DeviceOrientation.portraitUp,
                 DeviceOrientation.portraitDown,
-                // DeviceOrientation.landscapeLeft,
-                // DeviceOrientation.landscapeRight,
               ]);
               _setIOSPortraitOrientation();
             }
@@ -234,7 +232,7 @@ class _ChewiePlayerState extends State<Chewie> {
     ]);
 
     if (Platform.isIOS) {
-      _setOrientationForIOS();
+      _setLandscapeOrientationForIOS();
     }
 
     if (!widget.allowedScreenSleep) {
@@ -247,17 +245,9 @@ class _ChewiePlayerState extends State<Chewie> {
     if (isKeptOn) {
       Screen.keepOn(false);
     }
-
-    SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-    SystemChrome.setPreferredOrientations([
-      // DeviceOrientation.portraitUp,
-      // DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
   }
 
-  void _setOrientationForIOS() async {
+  void _setLandscapeOrientationForIOS() async {
     print('set orientation to landscape ios');
     const channel = MethodChannel('chewie');
     final String feedback =
