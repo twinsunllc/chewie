@@ -149,6 +149,11 @@ class _ChewiePlayerState extends State<Chewie> {
                 DeviceOrientation.portraitDown,
               ]);
               _setIOSPortraitOrientation();
+            } else {
+              SystemChrome.setPreferredOrientations([
+                DeviceOrientation.portraitUp,
+                DeviceOrientation.portraitDown,
+              ]);
             }
             new Future<dynamic>.value(Navigator.of(context).pop());
           },
@@ -219,16 +224,18 @@ class _ChewiePlayerState extends State<Chewie> {
 
   Future<dynamic> _pushFullScreenWidget(BuildContext context) async {
     final isAndroid = Theme.of(context).platform == TargetPlatform.android;
+
     final TransitionRoute<Null> route = new PageRouteBuilder<Null>(
       settings: new RouteSettings(isInitialRoute: false),
       pageBuilder: _fullScreenRoutePageBuilder,
     );
 
-    
     SystemChrome.setEnabledSystemUIOverlays([]);
     SystemChrome.setPreferredOrientations([
-    DeviceOrientation.landscapeLeft,
-    DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
     ]);
 
     if (Platform.isIOS) {
@@ -248,17 +255,15 @@ class _ChewiePlayerState extends State<Chewie> {
   }
 
   void _setLandscapeOrientationForIOS() async {
-    print('set orientation to landscape ios');
-    const channel = MethodChannel('chewie');
-    final String feedback =
-        await channel.invokeMethod('setIOSLandscapeOrienation', null);
+    // print('set orientation to landscape ios');
+    // const channel = MethodChannel('chewie');
+    // final String feedback = await channel.invokeMethod('setIOSLandscapeOrienation', null);
   }
 
   void _setIOSPortraitOrientation() async {
     print('set orientation to portrait ios');
     const channel = MethodChannel('chewie');
-    final String feedback =
-        await channel.invokeMethod('setIOSPortraitOrienation', null);
+    final String feedback = await channel.invokeMethod('setIOSPortraitOrienation', null);
   }
 
   double _calculateAspectRatio(BuildContext context) {
